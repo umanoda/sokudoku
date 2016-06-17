@@ -34,3 +34,10 @@ cat cat.txt | sokudoku -w 250
 ## Inspire
 
 [pasky / speedread](https://github.com/pasky/speedread)
+
+## TODO
+
+* コマンドの実装
+* 表示単語の中央にある文字を赤く色づける
+* 赤く色づけた文字の表示位置を固定
+* 「任意の品詞+助詞」は分割せず表示する（「猫」「が」ではなく「猫が」と表示）
