@@ -1,8 +1,8 @@
 # Sokudoku
 
-A simple terminal-base open sourse like Spritz and speedread.
+Spritsやspeedreadのように使える、オープンソースのターミナルアプリケーションです。
 
-This command line filter show input *Japanese* test as a par-word RSVP (rapid serial visual presentation) aligned on optimal reading points. This kind of input mode allows reading text at a much more rapid pace than usual as the eye can stay fixed on a single place.
+このコマンドは、日本語のテキストを読み込んで単語ごとに素早く表示します。
 
 ## Install
 
@@ -19,15 +19,16 @@ $ go get github.com/umanoda/sokudoku
 cat cat.txt | sokudoku -w 250
 ```
 
-The default of 250 words per minut is very timid, designed so that you get used to this. Be sure to try cranking this up, 500wpm should still be fairly easy to follow even for beginners.
+デフォルトでは1単語を250ミリ秒ごとに切り替えて表示します。なれるまではこの速度を使うとよいでしょう。
+500ミリ秒ごとの表示ならば、かなり簡単に読み取ることが出来ます。
 
 ## Controls
 
-speedread is slightly interactive, with these controls accepted:
+コマンドの実行中に以下の操作が行えます
 
-* `[` - slow down by 10%
-* `]` - speed up by 10%
-* `space` - pause (and show the last two lines of context)
+* `[` - 表示速度を10%遅くします
+* `]` - 表示速度を10%速くします
+* `space` - 停止します (そして、最新の２行を表示します)
 
 
 ## Inspire
