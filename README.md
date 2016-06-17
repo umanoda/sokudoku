@@ -1,4 +1,4 @@
-# Sokudoku
+# Sokudoku(速読)
 
 Spritsやspeedreadのように使える、オープンソースのターミナルアプリケーションです。
 
@@ -7,10 +7,12 @@ Spritsやspeedreadのように使える、オープンソースのターミナ�
 ## Install
 
 ```
+# For install go-mecab
 $ export CGO_LDFLAGS="-L/path/to/lib -lmecab -lstdc++"
 $ export CGO_CFLAGS="-I/path/to/include"
-$ go get github.com/shogo82148/go-mecab
-$ go get github.com/umanoda/sokudoku
+
+# install sokudoku
+$ go install github.com/umanoda/sokudoku
 ```
 
 ## Basic Example
