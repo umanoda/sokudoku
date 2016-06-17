@@ -8,8 +8,11 @@ import (
   "os"
 )
 
+var (
+  wait = flag.Int("w", 250, "Wait time.") // Intervel time (ms) par display next word.
+)
+
 func main() {
-  wait := flag.Int("w", 250, "Wait time.")
   flag.Parse()
 
   err := sokudoku.Run(*wait)

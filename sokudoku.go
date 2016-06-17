@@ -53,7 +53,7 @@ func Run(wait int) error {
 		if !ok {
 			break
 		}
-		fmt.Print("\r", w)
+		fmt.Println(w)
 		time.Sleep(time.Duration(wait)* time.Millisecond)
 	}
 
