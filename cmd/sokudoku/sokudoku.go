@@ -1,24 +1,24 @@
 package main
 
 import (
-  "fmt"
 	"flag"
+	"fmt"
 	"github.com/umanoda/sokudoku"
 
-  "os"
+	"os"
 )
 
 var (
-  wait = flag.Int("w", 250, "Wait time.") // Intervel time (ms) par display next word.
+	wait = flag.Int("w", 250, "Wait time.") // Intervel time (ms) par display next word.
 )
 
 func main() {
-  flag.Parse()
+	flag.Parse()
 
-  err := sokudoku.Run(*wait)
-  if err != nil {
-    fmt.Println("Error occered : ", err)
-    os.Exit(1)
-  }
-  os.Exit(0)
+	err := sokudoku.Run(*wait)
+	if err != nil {
+		fmt.Println("Error occered : ", err)
+		os.Exit(1)
+	}
+	os.Exit(0)
 }

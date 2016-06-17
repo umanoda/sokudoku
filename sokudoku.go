@@ -54,7 +54,7 @@ func Run(wait int) error {
 			break
 		}
 		fmt.Println(w)
-		time.Sleep(time.Duration(wait)* time.Millisecond)
+		time.Sleep(time.Duration(wait) * time.Millisecond)
 	}
 
 	return reader.Err()
