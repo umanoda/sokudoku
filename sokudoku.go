@@ -4,19 +4,16 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strings"
 	"time"
-
-	"github.com/shogo82148/go-mecab"
+	//"github.com/nsf/termbox-go"
 )
 
 func Run(wait int) error {
-	// Prepare MeCab.
-	tagger, err := mecab.New(map[string]string{"output-format-type": "wakati"})
+	p, err := phraseInit()
 	if err != nil {
 		return err
 	}
-	defer tagger.Destroy()
+	defer p.Destroy()
 
 	// Get a line from stdin.
 	reader := bufio.NewScanner(os.Stdin)
@@ -36,11 +33,11 @@ func Run(wait int) error {
 			if !ok {
 				break
 			}
-			res, err := tagger.Parse(l)
+			res, err := p.Parse(l)
 			if err != nil {
 				break
 			}
-			for _, w := range strings.Split(res, " ") {
+			for _, w := range res {
 				word <- w
 			}
 		}
