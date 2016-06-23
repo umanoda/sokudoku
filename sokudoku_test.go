@@ -5,11 +5,12 @@ import "testing"
 func TestBuildPhrase(t *testing.T) {
 	p, _ := phraseInit()
 
-	got, _ := p.Parse("ぼくはくま。赤い大きな熊。「やあ、こんにちは。」「やあ」と挨拶")
+	got, _ := p.Parse("ぼくはくま。フワフワした赤い大きな熊。「やあ、こんにちは。」「やあ」と挨拶")
 
 	expects := []string{
 		"ぼくは",
 		"くま。",
+		"フワフワした",
 		"赤い",
 		"大きな",
 		"熊。",

@@ -41,6 +41,9 @@ func (p *phrase) Parse(s string) ([]string, error) {
 		word := m[0]
 		detail := strings.Split(m[1], ",")
 		word_type := detail[0]
+		sub_type := detail[1]
+		help_type := detail[2]  //接尾タイプ
+		conjugrate := detail[5] //活用形
 
 		if next_force {
 			tmp = append(tmp, word)
@@ -48,8 +51,10 @@ func (p *phrase) Parse(s string) ([]string, error) {
 			continue
 		}
 		switch word_type {
-		case "助詞", "記号":
-			sub_type := detail[1]
+		case "接頭詞":
+			tmp = append(tmp, word)
+			next_force = true
+		case "助詞", "助動詞", "副詞", "記号":
 			switch sub_type {
 			case "括弧開":
 				if len(tmp) > 0 {
@@ -61,10 +66,30 @@ func (p *phrase) Parse(s string) ([]string, error) {
 				tmp = append(tmp, word)
 			}
 		default:
-			if len(tmp) > 0 {
-				res = append(res, strings.Join(tmp, ""))
+			switch sub_type {
+			case "接尾":
+				switch help_type {
+				case "助数詞":
+					tmp = append(tmp, word)
+				default:
+					if len(tmp) > 0 {
+						res = append(res, strings.Join(tmp, ""))
+					}
+					tmp = []string{word}
+				}
+			case "非自立":
+				tmp = append(tmp, word)
+			default:
+				switch conjugrate {
+				case "連用形":
+					tmp = append(tmp, word)
+				default:
+					if len(tmp) > 0 {
+						res = append(res, strings.Join(tmp, ""))
+					}
+					tmp = []string{word}
+				}
 			}
-			tmp = []string{word}
 		}
 	}
 	if len(tmp) > 0 {
