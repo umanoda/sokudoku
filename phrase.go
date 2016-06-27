@@ -23,6 +23,7 @@ func phraseInit() (*phrase, error) {
 	return p, nil
 }
 
+// TODO use decision tree.
 func (p *phrase) Parse(s string) ([]string, error) {
 	var res []string
 	parsed, err := p.mecab.Parse(s)
