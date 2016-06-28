@@ -45,14 +45,22 @@ func Run(wait int) error {
 	}()
 
 	// Output a word.
+	outputWord(word, wait)
+
+	return reader.Err()
+}
+
+func outputWord(word <-chan string, wait int) {
 	for {
 		w, ok := <-word
 		if !ok {
 			break
 		}
-		fmt.Println(w)
+		if DEBUG {
+			fmt.Println("...", w)
+		} else {
+			fmt.Println(w)
+		}
 		time.Sleep(time.Duration(wait) * time.Millisecond)
 	}
-
-	return reader.Err()
 }

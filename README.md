@@ -43,3 +43,14 @@ cat cat.txt | sokudoku -w 250
 * 表示単語の中央にある文字を赤く色づける
 * 赤く色づけた文字の表示位置を固定
 * 文章の区切りは決定木をつかって機械学習させたい…
+
+## Development
+
+### デバッグモードでの実行
+
+```
+$ cat cat.txt | go run -tags debug cmd/sokudoku/sokudoku.go
+or
+$ go build -tags cmd/sokudoku/sokudoku.go
+```
+
