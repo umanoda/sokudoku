@@ -3,9 +3,11 @@ package sokudoku
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"os"
 	"time"
-	//"github.com/nsf/termbox-go"
+
+	"github.com/mattn/go-tty"
 )
 
 func Run(wait int) error {
@@ -45,22 +47,62 @@ func Run(wait int) error {
 	}()
 
 	// Output a word.
-	outputWord(word, wait)
+	oerr := outputWord(word, wait)
+	if oerr != nil {
+		return oerr
+	}
 
 	return reader.Err()
 }
 
-func outputWord(word <-chan string, wait int) {
-	for {
-		w, ok := <-word
-		if !ok {
-			break
+func outputWord(word <-chan string, wait int) error {
+	if DEBUG {
+		//-tags debug
+		for {
+			w, ok := <-word
+			if !ok {
+				break
+			}
+			fmt.Println("   ", w)
+			time.Sleep(time.Duration(wait) * time.Millisecond)
 		}
-		if DEBUG {
-			fmt.Println("...", w)
-		} else {
-			fmt.Println(w)
+	} else {
+		tty, err := tty.Open()
+		if err != nil {
+			return err
 		}
-		time.Sleep(time.Duration(wait) * time.Millisecond)
+		defer tty.Close()
+
+		key_queue := make(chan rune)
+		go func() {
+			for {
+				r, _ := tty.ReadRune()
+				key_queue <- r
+			}
+		}()
+
+	loop:
+		for {
+			select {
+			case r := <-key_queue:
+				switch r {
+				case 3: // Ctrl-C
+					break loop
+				case 91: // [
+					wait = int(math.Max(float64(wait)*0.9, 10))
+				case 93: // ]
+					wait = int(math.Min(float64(wait)*1.1, 2000))
+				case 32: // Space
+					// TODO puase
+				}
+			case w, ok := <-word:
+				if !ok {
+					break loop
+				}
+				fmt.Println("...", w)
+				time.Sleep(time.Duration(wait) * time.Millisecond)
+			}
+		}
 	}
+	return nil
 }
