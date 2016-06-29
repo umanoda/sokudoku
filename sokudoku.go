@@ -71,7 +71,16 @@ func outputWord(word <-chan string, wait int) error {
 		if err != nil {
 			return err
 		}
-		defer tty.Close()
+		defer func() {
+			for {
+				fmt.Println("Please ENTER.")
+				r, _ := tty.ReadRune()
+				if r == 13 {
+					break
+				}
+			}
+			tty.Close()
+		}()
 
 		key_queue := make(chan rune)
 		go func() {
