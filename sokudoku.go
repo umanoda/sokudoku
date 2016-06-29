@@ -90,26 +90,38 @@ func outputWord(word <-chan string, wait int) error {
 			}
 		}()
 
+		// 停止フラグ
+		stop := false
 	loop:
 		for {
-			select {
-			case r := <-key_queue:
-				switch r {
-				case 3: // Ctrl-C
-					break loop
-				case 91: // [
-					wait = int(math.Max(float64(wait)*0.9, 10))
-				case 93: // ]
-					wait = int(math.Min(float64(wait)*1.1, 2000))
-				case 32: // Space
-					// TODO puase
+			if stop {
+        // in pause
+				r := <-key_queue
+				if r == 32 {
+          // pressed Space
+					stop = false
 				}
-			case w, ok := <-word:
-				if !ok {
-					break loop
+			} else {
+				select {
+				case r := <-key_queue:
+					switch r {
+					case 3: // Ctrl-C
+						break loop
+					case 91: // [
+						wait = int(math.Max(float64(wait)*0.9, 10))
+					case 93: // ]
+						wait = int(math.Min(float64(wait)*1.1, 2000))
+					case 32: // Space
+						// TODO puase
+						stop = true
+					}
+				case w, ok := <-word:
+					if !ok {
+						break loop
+					}
+					fmt.Println("...", w)
+					time.Sleep(time.Duration(wait) * time.Millisecond)
 				}
-				fmt.Println("...", w)
-				time.Sleep(time.Duration(wait) * time.Millisecond)
 			}
 		}
 	}
