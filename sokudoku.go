@@ -73,7 +73,7 @@ func outputWord(word <-chan string, wait int) error {
 		}
 		defer func() {
 			for {
-				fmt.Println("Please ENTER.")
+				fmt.Println("\n\n  Exit. Please press ENTER.")
 				r, _ := tty.ReadRune()
 				if r == 13 {
 					break
@@ -90,15 +90,17 @@ func outputWord(word <-chan string, wait int) error {
 			}
 		}()
 
+		fmt.Println("    .")
+
 		// 停止フラグ
 		stop := false
 	loop:
 		for {
 			if stop {
-        // in pause
+				// in pause
 				r := <-key_queue
 				if r == 32 {
-          // pressed Space
+					// pressed Space
 					stop = false
 				}
 			} else {
@@ -119,7 +121,7 @@ func outputWord(word <-chan string, wait int) error {
 					if !ok {
 						break loop
 					}
-					fmt.Println("...", w)
+					fmt.Printf("\r%s                        ", w)
 					time.Sleep(time.Duration(wait) * time.Millisecond)
 				}
 			}
