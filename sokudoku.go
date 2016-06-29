@@ -92,7 +92,7 @@ func outputWord(word <-chan string, wait int) error {
 
 		fmt.Println("    .")
 
-		// 停止フラグ
+		// pause flag
 		stop := false
 	loop:
 		for {
@@ -114,7 +114,6 @@ func outputWord(word <-chan string, wait int) error {
 					case 93: // ]
 						wait = int(math.Min(float64(wait)*1.1, 2000))
 					case 32: // Space
-						// TODO puase
 						stop = true
 					}
 				case w, ok := <-word:
