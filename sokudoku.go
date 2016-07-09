@@ -138,25 +138,33 @@ func outputWord(word <-chan string, wait int) error {
 
 // 画面に文字を表示する
 func showWord(str string) {
-	fmt.Print(_showWord(str))
+	s := _showWord(str)
+	fmt.Print(
+		"\r\033[K", //行消去
+		ansiColor("bold"),
+		s[0],
+		s[1],
+		ansiColor("red"),
+		s[2],
+		ansiColor("reset"),
+		ansiColor("bold"),
+		s[3],
+		ansiColor("reset"),
+	)
 }
 
-func _showWord(str string) string {
+func _showWord(str string) []string {
 	str_len := utf8.RuneCountInString(str)
 
 	// 強調文字位置
 	i := (str_len - 1) / 2
 
-	return "\r\033[K" + //行消去
-		ansiColor("bold") +
-		strings.Repeat(" ", visulapos-(i*2)) +
-		substr(str, 0, i) +
-		ansiColor("red") +
-		substr(str, i, 1) +
-		ansiColor("reset") +
-		ansiColor("bold") +
-		substr(str, i+1, -1) +
-		ansiColor("reset")
+	return []string{
+		strings.Repeat(" ", visulapos-(i*2)),
+		substr(str, 0, i),
+		substr(str, i, 1),
+		substr(str, i+1, -1),
+	}
 }
 
 func substr(str string, start int, length int) string {
