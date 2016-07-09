@@ -5,10 +5,17 @@ import (
 	"fmt"
 	"math"
 	"os"
+	"strings"
 	"time"
+	"unicode/utf8"
 
 	"github.com/mattn/go-tty"
+	//debug
+	//"github.com/k0kubun/pp"
 )
+
+// 表示文字列の左側余白長さ(全角文字長)
+const visulapos = 22
 
 func Run(wait int) error {
 	p, err := phraseInit()
@@ -63,7 +70,7 @@ func outputWord(word <-chan string, wait int) error {
 			if !ok {
 				break
 			}
-			fmt.Println("   ", w)
+			fmt.Println(_showWord(w))
 			time.Sleep(time.Duration(wait) * time.Millisecond)
 		}
 	} else {
@@ -90,7 +97,7 @@ func outputWord(word <-chan string, wait int) error {
 			}
 		}()
 
-		fmt.Println("    .")
+		fmt.Println(strings.Repeat(" ", visulapos-1), "・")
 
 		// pause flag
 		stop := false
@@ -120,11 +127,60 @@ func outputWord(word <-chan string, wait int) error {
 					if !ok {
 						break loop
 					}
-					fmt.Printf("\r%s                        ", w)
+					showWord(w)
 					time.Sleep(time.Duration(wait) * time.Millisecond)
 				}
 			}
 		}
 	}
 	return nil
+}
+
+// 画面に文字を表示する
+func showWord(str string) {
+	fmt.Print(_showWord(str))
+}
+
+func _showWord(str string) string {
+	str_len := utf8.RuneCountInString(str)
+
+	// 強調文字位置
+	i := (str_len - 1) / 2
+
+	return "\r\033[K" + //行消去
+		ansiColor("bold") +
+		strings.Repeat(" ", visulapos-(i*2)) +
+		substr(str, 0, i) +
+		ansiColor("red") +
+		substr(str, i, 1) +
+		ansiColor("reset") +
+		ansiColor("bold") +
+		substr(str, i+1, -1) +
+		ansiColor("reset")
+}
+
+func substr(str string, start int, length int) string {
+	if length == 0 {
+		return ""
+	}
+
+	r := []rune(str)
+	if length == -1 {
+		return string(r[start:len(r)])
+	} else {
+		return string(r[start:(start + length)])
+	}
+}
+
+func ansiColor(c string) string {
+	switch c {
+	case "red":
+		return "\033[1;31m"
+	case "reset":
+		return "\033[0;37m"
+	case "bold":
+		return "\033[1;37m"
+	default:
+		return ""
+	}
 }
